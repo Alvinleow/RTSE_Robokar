@@ -1,3 +1,4 @@
+#define F_CPU 16000000UL
 #include "..\inc\kernel.h"                  /* Always include these to use uCOS-II      */
 #include "..\inc\hal_robo.h"                /*   and RoboKar HAL                        */
 #include <util/delay.h>
@@ -13,7 +14,7 @@
 
 #define ROUTE_OTHERS             0
 #define ROUTE_AB                 1
-#define ROUTE_EF                 2
+#define ROUTE_EF                 3
 
 char ROUTE = ROUTE_OTHERS;                  /* Current route                            */
 
@@ -126,9 +127,7 @@ void Navig (void *data) {
                     myrobot.rspeed = STOP_SPEED;
                     myrobot.lspeed = MEDIUM_SPEED;
                     cputs("111 - All black � Turn RIGHT\r\n");
-							
-					section++;
-					robo_Honk();
+			
                     break;
 
                 case 5:
@@ -320,7 +319,7 @@ int main( void ) {
 	
     OSTaskCreate(SwitchRouteTask,                          /* create SwitchRoute Task        */
                 (void *)0,
-                (void *)&TaskStartStk[TASK_STK_SZ - 1],
+                (void *)&ToggleRouteStk[TASK_STK_SZ - 1],
                 TASK_SWITCH_ROUTE_PRIO);
 
 	cputs("System booted!\r\n");
